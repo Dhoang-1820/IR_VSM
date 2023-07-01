@@ -79,8 +79,7 @@ public class Main {
 		int N = docs.size();
 		for (Map.Entry<String, Integer> item : df.entrySet()) {
 			if (item.getValue() != 0) {
-				double nDf = (double)N / (double)item.getValue();
-				calResult = Math.log10(nDf);
+				calResult = Math.log10((double)N / (double)item.getValue());
 			} else {
 				calResult = 0;
 			}
