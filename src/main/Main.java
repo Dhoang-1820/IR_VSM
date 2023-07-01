@@ -79,7 +79,8 @@ public class Main {
 		int N = docs.size();
 		for (Map.Entry<String, Integer> item : df.entrySet()) {
 			if (item.getValue() != 0) {
-				calResult = Math.log10(N / item.getValue());
+				double nDf = (double)N / (double)item.getValue();
+				calResult = Math.log10(nDf);
 			} else {
 				calResult = 0;
 			}
@@ -108,14 +109,12 @@ public class Main {
 		return result;
 	}
 
-	public static Set<String> retrievAllTerm(List<Map<Integer, String>> documents) {
+	public static Set<String> retrievAllTerm(Map<Integer, String> documents) {
 		Set<String> termSet = new HashSet<>();
 		List<String> terms = new ArrayList<>();
-		for (Map<Integer, String> d : documents) {
-			for (Map.Entry<Integer, String> doc : d.entrySet()) {
-				terms = break2Words(doc.getValue());
-				termSet.addAll(terms);
-			}
+		for (Map.Entry<Integer, String> doc : documents.entrySet()) {
+			terms = break2Words(doc.getValue());
+			termSet.addAll(terms);
 		}
 		return termSet;
 	}
@@ -176,7 +175,6 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 
-		List<Map<Integer, String>> docsList = new ArrayList<>();
 		docs = Files.readFile(false);
 		queries = Files.readFile(true);
 
@@ -186,12 +184,7 @@ public class Main {
 		docs = removeStopWord(docs);
 		queries = removeStopWord(queries);
 
-		docsList.add(docs);
-
-		List<Map<Integer, String>> allDocs = new ArrayList<>();
-		allDocs.addAll(docsList);
-
-		termSet = retrievAllTerm(allDocs);
+		termSet = retrievAllTerm(docs);
 		
 		Map<Integer, Map<String, Double>> tfDocs = new HashMap<>();
 		for (Map.Entry<Integer, String> doc : docs.entrySet()) {
@@ -231,7 +224,7 @@ public class Main {
 				normQ = getNorm(tf_idfQ);
 				normD = getNorm(tf_idfD);
 				if (normD != 0 && normQ != 0) {
-					cosinResult = dot / normQ * normD;
+					cosinResult = dot / (normQ * normD);
 				} else {
 					cosinResult = 0;
 				}
